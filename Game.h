@@ -25,7 +25,12 @@ private:
     void GenerateOutput();
 
     SDL_Window *mWindow;
+    SDL_Renderer *mRenderer;
+
     bool mIsRunning;
+
+    const int mWidth = 1024;
+    const int mHeight = 768;
 };
 
 

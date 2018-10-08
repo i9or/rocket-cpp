@@ -20,7 +20,7 @@ bool Game::Initialize() {
     mWindow = SDL_CreateWindow(
             "Game Programming in C++",
             100, 100,
-            1024, 768,
+            mWidth, mHeight,
             0
     );
 
@@ -29,10 +29,27 @@ bool Game::Initialize() {
         return false;
     }
 
+    mRenderer = SDL_CreateRenderer(
+            mWindow,
+            -1,
+            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+    );
+
+    if (!mRenderer) {
+        SDL_Log("Failed to created a renderer: %s", SDL_GetError());
+        return false;
+    }
+
+    // FIXME: macOS Mojave black screen workaround
+    SDL_PumpEvents();
+    SDL_SetWindowSize(mWindow, mWidth, mHeight);
+    // -------------------------------------------
+
     return true;
 }
 
 void Game::ShutDown() {
+    SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
 }
@@ -40,6 +57,8 @@ void Game::ShutDown() {
 void Game::RunLoop() {
     while (mIsRunning) {
         ProcessInput();
+        UpdateGame();
+        GenerateOutput();
     }
 }
 
@@ -68,7 +87,9 @@ void Game::UpdateGame() {
 }
 
 void Game::GenerateOutput() {
-
+    SDL_SetRenderDrawColor(mRenderer, 41, 128, 185, 255);
+    SDL_RenderClear(mRenderer);
+    SDL_RenderPresent(mRenderer);
 }
 
 
