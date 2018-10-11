@@ -20,7 +20,7 @@ bool Game::Initialize() {
     }
 
     mWindow = SDL_CreateWindow(
-            "Game Programming in C++",
+            "Multi Pong",
             100, 100,
             mWidth, mHeight,
             0
@@ -154,7 +154,7 @@ void Game::UpdateGame() {
 }
 
 void Game::GenerateOutput() {
-    SDL_SetRenderDrawColor(mRenderer, 41, 128, 185, 255);
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     SDL_RenderClear(mRenderer);
 
     // Drawing walls
