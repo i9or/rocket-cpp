@@ -20,7 +20,7 @@ bool Game::Initialize() {
     }
 
     mWindow = SDL_CreateWindow(
-            "Multi Pong",
+            "Chapter 1 | Pong",
             100, 100,
             mWidth, mHeight,
             0
