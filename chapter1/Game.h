@@ -5,7 +5,7 @@
 #ifndef GAME_CPP_GAME_H
 #define GAME_CPP_GAME_H
 
-#include <SDL2/SDL.h>
+#include "SDL.h"
 
 struct Vector2 {
     float x;
