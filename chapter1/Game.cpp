@@ -4,12 +4,11 @@
 
 #include "Game.h"
 
-Game::Game() :
-        mWindow(nullptr),
-        mIsRunning(true),
-        mTicksCount(0),
-        mPaddleDirection(0) {
-
+Game::Game()
+    : mWindow(nullptr)
+    , mIsRunning(true)
+    , mTicksCount(0)
+    , mPaddleDirection(0) {
 }
 
 bool Game::Initialize() {
@@ -19,28 +18,21 @@ bool Game::Initialize() {
         return false;
     }
 
-    mWindow = SDL_CreateWindow(
-            "Chapter 1 | Pong",
-            100, 100,
-            mWidth, mHeight,
-            0
-    );
+    mWindow = SDL_CreateWindow("Chapter 1 | Pong", 100, 100, mWidth, mHeight, 0);
 
     if (!mWindow) {
         SDL_Log("Failed to create a window: %s", SDL_GetError());
         return false;
     }
 
-    mRenderer = SDL_CreateRenderer(
-            mWindow,
-            -1,
-            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
-    );
+    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (!mRenderer) {
         SDL_Log("Failed to created a renderer: %s", SDL_GetError());
         return false;
     }
+
+    int a[] = {1, 2, 3, 5, 6, 7};
 
     // FIXME: macOS Mojave black screen workaround
     SDL_PumpEvents();
@@ -84,7 +76,7 @@ void Game::ProcessInput() {
         }
     }
 
-    const Uint8 *state = SDL_GetKeyboardState(nullptr);
+    const Uint8* state = SDL_GetKeyboardState(nullptr);
 
     if (state[SDL_SCANCODE_ESCAPE]) {
         mIsRunning = false;
@@ -102,7 +94,8 @@ void Game::ProcessInput() {
 }
 
 void Game::UpdateGame() {
-    while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16));
+    while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+        ;
 
     float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
 
@@ -130,10 +123,8 @@ void Game::UpdateGame() {
     float diff = mPaddlePosition.y - mBallPosition.y;
     diff = (diff > 0.0f) ? diff : -diff;
 
-    if (diff <= mPaddleHeight / 2.0f &&
-        mBallPosition.x <= (mPaddlePosition.x + mThickness / 2.0f) &&
-        mBallPosition.x >= (mPaddlePosition.x - mThickness / 2.0f) &&
-        mBallVelocity.x < 0.0f) {
+    if (diff <= mPaddleHeight / 2.0f && mBallPosition.x <= (mPaddlePosition.x + mThickness / 2.0f)
+            && mBallPosition.x >= (mPaddlePosition.x - mThickness / 2.0f) && mBallVelocity.x < 0.0f) {
         mBallVelocity.x *= -1.0;
     } else if (mBallPosition.x <= 0.0f) {
         mIsRunning = false;
@@ -147,8 +138,7 @@ void Game::UpdateGame() {
         mBallVelocity.y *= -1;
     }
 
-    if (mBallPosition.y >= (mHeight - mThickness) &&
-        mBallVelocity.y > 0.0f) {
+    if (mBallPosition.y >= (mHeight - mThickness) && mBallVelocity.y > 0.0f) {
         mBallVelocity.y *= -1;
     }
 }
@@ -159,7 +149,7 @@ void Game::GenerateOutput() {
 
     // Drawing walls
     SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-    SDL_Rect wall{0, 0, mWidth, mThickness};
+    SDL_Rect wall {0, 0, mWidth, mThickness};
     SDL_RenderFillRect(mRenderer, &wall);
 
     wall.y = mHeight - mThickness;
@@ -172,24 +162,14 @@ void Game::GenerateOutput() {
     SDL_RenderFillRect(mRenderer, &wall);
 
     // Drawing ball
-    SDL_Rect ball{
-            static_cast<int>(mBallPosition.x - mThickness / 2.f),
-            static_cast<int>(mBallPosition.y - mThickness / 2.f),
-            mThickness,
-            mThickness
-    };
+    SDL_Rect ball {static_cast<int>(mBallPosition.x - mThickness / 2.f),
+            static_cast<int>(mBallPosition.y - mThickness / 2.f), mThickness, mThickness};
     SDL_RenderFillRect(mRenderer, &ball);
 
     // Drawing paddle
-    SDL_Rect paddle{
-            static_cast<int>(mPaddlePosition.x - mThickness / 2.f),
-            static_cast<int>(mPaddlePosition.y - mPaddleHeight / 2.f),
-            mThickness,
-            mPaddleHeight
-    };
+    SDL_Rect paddle {static_cast<int>(mPaddlePosition.x - mThickness / 2.f),
+            static_cast<int>(mPaddlePosition.y - mPaddleHeight / 2.f), mThickness, mPaddleHeight};
     SDL_RenderFillRect(mRenderer, &paddle);
 
     SDL_RenderPresent(mRenderer);
 }
-
-

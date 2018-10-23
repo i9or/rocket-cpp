@@ -148,3 +148,5 @@ fabric.properties
 .idea/
 .vscode/
 build/
+
+CMakeLists.txt.user

@@ -1,0 +1,12 @@
+BasedOnStyle: Webkit
+ColumnLimit: 120
+IndentWidth: 4
+ContinuationIndentWidth: 8
+AlignTrailingComments: true
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+BinPackParameters: false
+BreakBeforeBraces: Attach
+Cpp11BracedListStyle: true
+IndentCaseLabels: true

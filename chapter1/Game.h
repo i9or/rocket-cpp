@@ -1,7 +1,3 @@
-//
-// Created by Igor Pelekhan on 02/10/2018.
-//
-
 #ifndef GAME_CPP_GAME_H
 #define GAME_CPP_GAME_H
 
@@ -29,8 +25,8 @@ private:
 
     void GenerateOutput();
 
-    SDL_Window *mWindow;
-    SDL_Renderer *mRenderer;
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
     Uint32 mTicksCount;
     bool mIsRunning;
 
@@ -45,5 +41,4 @@ private:
     Vector2 mBallVelocity;
 };
 
-
-#endif //GAME_CPP_GAME_H
+#endif // GAME_CPP_GAME_H
