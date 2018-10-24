@@ -6,9 +6,10 @@
 
 Game::Game()
     : mWindow(nullptr)
-    , mIsRunning(true)
     , mTicksCount(0)
-    , mPaddleDirection(0) {
+    , mIsRunning(true)
+    , mPaddleDirectionA(0)
+    , mPaddleDirectionB(0) {
 }
 
 bool Game::Initialize() {
@@ -32,15 +33,17 @@ bool Game::Initialize() {
         return false;
     }
 
-    int a[] = {1, 2, 3, 5, 6, 7};
-
     // FIXME: macOS Mojave black screen workaround
     SDL_PumpEvents();
     SDL_SetWindowSize(mWindow, mWidth, mHeight);
     // -------------------------------------------
 
-    mPaddlePosition.x = mThickness + mThickness / 2.0f;
-    mPaddlePosition.y = mHeight / 2.0f;
+    mPaddlePositionA.x = mThickness + mThickness / 2.0f;
+    mPaddlePositionA.y = mHeight / 2.0f;
+
+    mPaddlePositionB.x = mWidth - mThickness - mThickness / 2.0f;
+    mPaddlePositionB.y = mHeight / 2.0f;
+
     mBallPosition.x = mWidth / 2.0f;
     mBallPosition.y = mHeight / 2.0f;
     mBallVelocity.x = -200.0f;
@@ -82,14 +85,26 @@ void Game::ProcessInput() {
         mIsRunning = false;
     }
 
-    mPaddleDirection = 0;
+    // Process first player paddle movement
+    mPaddleDirectionA = 0;
 
     if (state[SDL_SCANCODE_W]) {
-        mPaddleDirection -= 1;
+        mPaddleDirectionA -= 1;
     }
 
     if (state[SDL_SCANCODE_S]) {
-        mPaddleDirection += 1;
+        mPaddleDirectionA += 1;
+    }
+
+    // Process second player paddle movement
+    mPaddleDirectionB = 0;
+
+    if (state[SDL_SCANCODE_I]) {
+        mPaddleDirectionB -= 1;
+    }
+
+    if (state[SDL_SCANCODE_K]) {
+        mPaddleDirectionB += 1;
     }
 }
 
@@ -105,35 +120,51 @@ void Game::UpdateGame() {
 
     mTicksCount = SDL_GetTicks();
 
-    if (mPaddleDirection != 0) {
-        mPaddlePosition.y += mPaddleDirection * 300.0f * deltaTime;
+    UpdatePaddle(deltaTime, mPaddlePositionA, mPaddleDirectionA);
+    UpdatePaddle(deltaTime, mPaddlePositionB, mPaddleDirectionB);
 
-        if (mPaddlePosition.y < (mPaddleHeight / 2.0f + mThickness)) {
-            mPaddlePosition.y = mPaddleHeight / 2.0f + mThickness;
+    UpdateBall(deltaTime);
+}
+
+void Game::UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& paddleDirection) {
+    if (paddleDirection != 0) {
+        paddlePosition.y += paddleDirection * 300.0f * deltaTime;
+
+        if (paddlePosition.y < (mPaddleHeight / 2.0f + mThickness)) {
+            paddlePosition.y = mPaddleHeight / 2.0f + mThickness;
         }
 
-        if (mPaddlePosition.y > (mHeight - mPaddleHeight / 2.0f - mThickness)) {
-            mPaddlePosition.y = mHeight - mPaddleHeight / 2.0f - mThickness;
+        if (paddlePosition.y > (mHeight - mPaddleHeight / 2.0f - mThickness)) {
+            paddlePosition.y = mHeight - mPaddleHeight / 2.0f - mThickness;
         }
     }
+}
 
+void Game::UpdateBall(const float& deltaTime) {
     mBallPosition.x += mBallVelocity.x * deltaTime;
     mBallPosition.y += mBallVelocity.y * deltaTime;
 
-    float diff = mPaddlePosition.y - mBallPosition.y;
-    diff = (diff > 0.0f) ? diff : -diff;
+    float diffA = mPaddlePositionA.y - mBallPosition.y;
+    diffA = (diffA > 0.0f) ? diffA : -diffA;
 
-    if (diff <= mPaddleHeight / 2.0f && mBallPosition.x <= (mPaddlePosition.x + mThickness / 2.0f)
-            && mBallPosition.x >= (mPaddlePosition.x - mThickness / 2.0f) && mBallVelocity.x < 0.0f) {
+    float diffB = mPaddlePositionB.y - mBallPosition.y;
+    diffB = (diffB > 0.0f) ? diffB : -diffB;
+
+    if (diffA <= mPaddleHeight / 2.0f &&                                   //
+            mBallPosition.x <= (mPaddlePositionA.x + mThickness / 2.0f) && //
+            mBallPosition.x >= (mPaddlePositionA.x - mThickness / 2.0f) && //
+            mBallVelocity.x < 0.0f) {
         mBallVelocity.x *= -1.0;
-    } else if (mBallPosition.x <= 0.0f) {
+    } else if (diffB <= mPaddleHeight / 2.0f &&                            //
+            mBallPosition.x >= (mPaddlePositionB.x - mThickness / 2.0f) && //
+            mBallPosition.x <= (mPaddlePositionB.x + mThickness / 2.0f) && //
+            mBallVelocity.x > 0.0f) {
+        mBallVelocity.x *= -1.0;
+    } else if (mBallPosition.x <= 0.0f || mBallPosition.x >= mWidth) {
         mIsRunning = false;
     }
 
-    if (mBallPosition.x >= (mWidth - mThickness) && mBallVelocity.x > 0.0f) {
-        mBallVelocity.x *= -1.0f;
-    }
-
+    // Collisions with top and bottom walls
     if (mBallPosition.y <= mThickness && mBallVelocity.y < 0.0f) {
         mBallVelocity.y *= -1;
     }
@@ -155,21 +186,20 @@ void Game::GenerateOutput() {
     wall.y = mHeight - mThickness;
     SDL_RenderFillRect(mRenderer, &wall);
 
-    wall.x = mWidth - mThickness;
-    wall.y = 0;
-    wall.w = mThickness;
-    wall.h = mWidth;
-    SDL_RenderFillRect(mRenderer, &wall);
-
     // Drawing ball
-    SDL_Rect ball {static_cast<int>(mBallPosition.x - mThickness / 2.f),
-            static_cast<int>(mBallPosition.y - mThickness / 2.f), mThickness, mThickness};
+    SDL_Rect ball {static_cast<int>(mBallPosition.x - mThickness / 2.0f),
+            static_cast<int>(mBallPosition.y - mThickness / 2.0f), mThickness, mThickness};
     SDL_RenderFillRect(mRenderer, &ball);
 
-    // Drawing paddle
-    SDL_Rect paddle {static_cast<int>(mPaddlePosition.x - mThickness / 2.f),
-            static_cast<int>(mPaddlePosition.y - mPaddleHeight / 2.f), mThickness, mPaddleHeight};
-    SDL_RenderFillRect(mRenderer, &paddle);
+    // Drawing paddle A
+    SDL_Rect paddleA {static_cast<int>(mPaddlePositionA.x - mThickness / 2.0f),
+            static_cast<int>(mPaddlePositionA.y - mPaddleHeight / 2.0f), mThickness, mPaddleHeight};
+    SDL_RenderFillRect(mRenderer, &paddleA);
+
+    // Drawing paddle B
+    SDL_Rect paddleB {static_cast<int>(mPaddlePositionB.x - mThickness / 2.0f),
+            static_cast<int>(mPaddlePositionB.y - mPaddleHeight / 2.0f), mThickness, mPaddleHeight};
+    SDL_RenderFillRect(mRenderer, &paddleB);
 
     SDL_RenderPresent(mRenderer);
 }

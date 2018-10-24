@@ -23,6 +23,10 @@ private:
 
     void UpdateGame();
 
+    void UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& paddleDirection);
+
+    void UpdateBall(const float& deltaTime);
+
     void GenerateOutput();
 
     SDL_Window* mWindow;
@@ -30,13 +34,16 @@ private:
     Uint32 mTicksCount;
     bool mIsRunning;
 
-    static const int mWidth = 1024;
-    static const int mHeight = 768;
-    static const int mThickness = 15;
+    static const int mWidth = 800;
+    static const int mHeight = 600;
+    static const int mThickness = 10;
     static constexpr int mPaddleHeight = mThickness * 6;
 
-    int mPaddleDirection;
-    Vector2 mPaddlePosition;
+    int mPaddleDirectionA;
+    Vector2 mPaddlePositionA;
+    int mPaddleDirectionB;
+    Vector2 mPaddlePositionB;
+
     Vector2 mBallPosition;
     Vector2 mBallVelocity;
 };
