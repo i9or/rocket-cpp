@@ -33,11 +33,6 @@ bool Game::Initialize() {
         return false;
     }
 
-    // FIXME: macOS Mojave black screen workaround
-    SDL_PumpEvents();
-    SDL_SetWindowSize(mWindow, mWidth, mHeight);
-    // -------------------------------------------
-
     mPaddlePositionA.x = mThickness + mThickness / 2.0f;
     mPaddlePositionA.y = mHeight / 2.0f;
 
