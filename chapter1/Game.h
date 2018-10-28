@@ -3,9 +3,18 @@
 
 #include "SDL.h"
 
+#include <random>
+#include <vector>
+
 struct Vector2 {
     float x;
     float y;
+};
+
+struct Ball {
+    Vector2 position;
+    Vector2 velocity;
+    bool shouldBeRendered;
 };
 
 class Game {
@@ -25,7 +34,7 @@ private:
 
     void UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& paddleDirection);
 
-    void UpdateBall(const float& deltaTime);
+    void UpdateBalls(const float& deltaTime);
 
     void GenerateOutput();
 
@@ -44,8 +53,8 @@ private:
     int mPaddleDirectionB;
     Vector2 mPaddlePositionB;
 
-    Vector2 mBallPosition;
-    Vector2 mBallVelocity;
+    static const int mBallsNumber = 5;
+    std::vector<Ball> mBalls;
 };
 
 #endif // GAME_CPP_GAME_H

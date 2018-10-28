@@ -39,10 +39,25 @@ bool Game::Initialize() {
     mPaddlePositionB.x = mWidth - mThickness - mThickness / 2.0f;
     mPaddlePositionB.y = mHeight / 2.0f;
 
-    mBallPosition.x = mWidth / 2.0f;
-    mBallPosition.y = mHeight / 2.0f;
-    mBallVelocity.x = -200.0f;
-    mBallVelocity.y = 235.0f;
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    int boundry = mThickness * 2;
+    std::uniform_int_distribution<int> verticalPositionDistribution(boundry, mHeight - boundry);
+    std::uniform_int_distribution<int> velocityValueDistribution(80, 235);
+    std::uniform_int_distribution<int> velocityDirectionDistibution(0, 1);
+    int table[]{-1, 1};
+
+    for (int i = 0; i < mBallsNumber; ++i) {
+        Ball newBall;
+
+        newBall.position.x = mWidth / 2.0f;
+        newBall.position.y = verticalPositionDistribution(mt);
+        newBall.velocity.x = velocityValueDistribution(mt) * table[velocityDirectionDistibution(mt)];
+        newBall.velocity.y = velocityValueDistribution(mt) * table[velocityDirectionDistibution(mt)];
+        newBall.shouldBeRendered = true;
+
+        mBalls.push_back(newBall);
+    }
 
     return true;
 }
@@ -118,7 +133,7 @@ void Game::UpdateGame() {
     UpdatePaddle(deltaTime, mPaddlePositionA, mPaddleDirectionA);
     UpdatePaddle(deltaTime, mPaddlePositionB, mPaddleDirectionB);
 
-    UpdateBall(deltaTime);
+    UpdateBalls(deltaTime);
 }
 
 void Game::UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& paddleDirection) {
@@ -135,37 +150,41 @@ void Game::UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& pa
     }
 }
 
-void Game::UpdateBall(const float& deltaTime) {
-    mBallPosition.x += mBallVelocity.x * deltaTime;
-    mBallPosition.y += mBallVelocity.y * deltaTime;
+void Game::UpdateBalls(const float& deltaTime) {
+    for (auto& ball : mBalls) {
+        if (ball.shouldBeRendered) {
+            ball.position.x += ball.velocity.x * deltaTime;
+            ball.position.y += ball.velocity.y * deltaTime;
 
-    float diffA = mPaddlePositionA.y - mBallPosition.y;
-    diffA = (diffA > 0.0f) ? diffA : -diffA;
+            float diffA = mPaddlePositionA.y - ball.position.y;
+            diffA = (diffA > 0.0f) ? diffA : -diffA;
 
-    float diffB = mPaddlePositionB.y - mBallPosition.y;
-    diffB = (diffB > 0.0f) ? diffB : -diffB;
+            float diffB = mPaddlePositionB.y - ball.position.y;
+            diffB = (diffB > 0.0f) ? diffB : -diffB;
 
-    if (diffA <= mPaddleHeight / 2.0f &&                                   //
-            mBallPosition.x <= (mPaddlePositionA.x + mThickness / 2.0f) && //
-            mBallPosition.x >= (mPaddlePositionA.x - mThickness / 2.0f) && //
-            mBallVelocity.x < 0.0f) {
-        mBallVelocity.x *= -1.0;
-    } else if (diffB <= mPaddleHeight / 2.0f &&                            //
-            mBallPosition.x >= (mPaddlePositionB.x - mThickness / 2.0f) && //
-            mBallPosition.x <= (mPaddlePositionB.x + mThickness / 2.0f) && //
-            mBallVelocity.x > 0.0f) {
-        mBallVelocity.x *= -1.0;
-    } else if (mBallPosition.x <= 0.0f || mBallPosition.x >= mWidth) {
-        mIsRunning = false;
-    }
+            if (diffA <= mPaddleHeight / 2.0f &&                                   //
+                    ball.position.x <= (mPaddlePositionA.x + mThickness / 2.0f) && //
+                    ball.position.x >= (mPaddlePositionA.x - mThickness / 2.0f) && //
+                    ball.velocity.x < 0.0f) {
+                ball.velocity.x *= -1.0;
+            } else if (diffB <= mPaddleHeight / 2.0f &&                            //
+                    ball.position.x <= (mPaddlePositionB.x + mThickness / 2.0f) && //
+                    ball.position.x >= (mPaddlePositionB.x - mThickness / 2.0f) && //
+                    ball.velocity.x > 0.0f) {
+                ball.velocity.x *= -1.0;
+            } else if (ball.position.x <= 0.0f || ball.position.x >= mWidth) {
+                ball.shouldBeRendered = false;
+            }
 
-    // Collisions with top and bottom walls
-    if (mBallPosition.y <= mThickness && mBallVelocity.y < 0.0f) {
-        mBallVelocity.y *= -1;
-    }
+            // Collisions with top and bottom walls
+            if (ball.position.y <= mThickness && ball.velocity.y < 0.0f) {
+                ball.velocity.y *= -1;
+            }
 
-    if (mBallPosition.y >= (mHeight - mThickness) && mBallVelocity.y > 0.0f) {
-        mBallVelocity.y *= -1;
+            if (ball.position.y >= (mHeight - mThickness) && ball.velocity.y > 0.0f) {
+                ball.velocity.y *= -1;
+            }
+        }
     }
 }
 
@@ -181,10 +200,14 @@ void Game::GenerateOutput() {
     wall.y = mHeight - mThickness;
     SDL_RenderFillRect(mRenderer, &wall);
 
-    // Drawing ball
-    SDL_Rect ball {static_cast<int>(mBallPosition.x - mThickness / 2.0f),
-            static_cast<int>(mBallPosition.y - mThickness / 2.0f), mThickness, mThickness};
-    SDL_RenderFillRect(mRenderer, &ball);
+    // Drawing balls
+    for (auto ball : mBalls) {
+        if (ball.shouldBeRendered) {
+            SDL_Rect ballRect {static_cast<int>(ball.position.x - mThickness / 2.0f),
+                    static_cast<int>(ball.position.y - mThickness / 2.0f), mThickness, mThickness};
+            SDL_RenderFillRect(mRenderer, &ballRect);
+        }
+    }
 
     // Drawing paddle A
     SDL_Rect paddleA {static_cast<int>(mPaddlePositionA.x - mThickness / 2.0f),
