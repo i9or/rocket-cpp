@@ -4,6 +4,7 @@
 #include "SDL.h"
 
 #include <random>
+#include <string>
 #include <vector>
 
 struct Vector2 {
@@ -37,6 +38,8 @@ private:
     void UpdateBalls(const float& deltaTime);
 
     void GenerateOutput();
+
+    float mLastMeasurement;
 
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;

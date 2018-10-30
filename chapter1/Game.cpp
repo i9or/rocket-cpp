@@ -5,7 +5,8 @@
 #include "Game.h"
 
 Game::Game()
-    : mWindow(nullptr)
+    : mLastMeasurement(0.0f)
+    , mWindow(nullptr)
     , mTicksCount(0)
     , mIsRunning(true)
     , mPaddleDirectionA(0)
@@ -45,7 +46,7 @@ bool Game::Initialize() {
     std::uniform_int_distribution<int> verticalPositionDistribution(boundry, mHeight - boundry);
     std::uniform_int_distribution<int> velocityValueDistribution(80, 235);
     std::uniform_int_distribution<int> velocityDirectionDistibution(0, 1);
-    int table[]{-1, 1};
+    int table[] {-1, 1};
 
     for (int i = 0; i < mBallsNumber; ++i) {
         Ball newBall;
@@ -70,9 +71,22 @@ void Game::ShutDown() {
 
 void Game::RunLoop() {
     while (mIsRunning) {
+        Uint32 startTime = SDL_GetTicks();
+
         ProcessInput();
         UpdateGame();
         GenerateOutput();
+
+        Uint32 finishTime = SDL_GetTicks();
+        float measurement = finishTime - startTime;
+        float smoothing = 0.9f;
+
+        measurement = (mLastMeasurement * smoothing) + (measurement * (1.0f - smoothing));
+
+        SDL_SetWindowTitle(
+                mWindow, (std::string("FPS: ") + std::to_string(static_cast<int>(1000.0f / measurement))).c_str());
+
+        mLastMeasurement = measurement;
     }
 }
 
