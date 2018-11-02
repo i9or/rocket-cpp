@@ -10,3 +10,4 @@ BinPackParameters: false
 BreakBeforeBraces: Attach
 Cpp11BracedListStyle: true
 IndentCaseLabels: true
+AlwaysBreakTemplateDeclarations: Yes
