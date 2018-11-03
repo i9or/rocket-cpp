@@ -7,7 +7,7 @@ AllowShortFunctionsOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 BinPackParameters: false
-BreakBeforeBraces: Attach
+BreakBeforeTernaryOperators: true
 Cpp11BracedListStyle: true
 IndentCaseLabels: true
 AlwaysBreakTemplateDeclarations: Yes

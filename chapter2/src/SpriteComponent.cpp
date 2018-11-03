@@ -7,15 +7,18 @@ SpriteComponent::SpriteComponent(Actor* owner, int drawOrder)
     , mTexture(nullptr)
     , mDrawOrder(drawOrder)
     , mTextureWidth(0)
-    , mTextureHeight(0) {
+    , mTextureHeight(0)
+{
     mOwner->GetGame()->AddSprite(this);
 }
 
-SpriteComponent::~SpriteComponent() {
+SpriteComponent::~SpriteComponent()
+{
     mOwner->GetGame()->RemoveSprite(this);
 }
 
-void SpriteComponent::Draw(SDL_Renderer* renderer) {
+void SpriteComponent::Draw(SDL_Renderer* renderer)
+{
     if (mTexture) {
         SDL_Rect r;
         r.w = static_cast<int>(mTextureWidth * mOwner->GetScale());
@@ -29,7 +32,8 @@ void SpriteComponent::Draw(SDL_Renderer* renderer) {
     }
 }
 
-void SpriteComponent::SetTexture(SDL_Texture* texture) {
+void SpriteComponent::SetTexture(SDL_Texture* texture)
+{
     mTexture = texture;
     SDL_QueryTexture(texture, nullptr, nullptr, &mTextureWidth, &mTextureHeight);
 }

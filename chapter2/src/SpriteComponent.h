@@ -13,13 +13,16 @@ public:
     virtual void Draw(SDL_Renderer* renderer);
     virtual void SetTexture(SDL_Texture* texture);
 
-    int GetDrawOrder() const {
+    int GetDrawOrder() const
+    {
         return mDrawOrder;
     }
-    int GetTextureWidth() const {
+    int GetTextureWidth() const
+    {
         return mTextureWidth;
     }
-    int GetTextureHeight() const {
+    int GetTextureHeight() const
+    {
         return mTextureHeight;
     }
 

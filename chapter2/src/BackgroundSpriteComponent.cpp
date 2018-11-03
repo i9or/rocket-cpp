@@ -3,10 +3,12 @@
 
 BackgroundSpriteComponent::BackgroundSpriteComponent(Actor* owner, int drawOrder)
     : SpriteComponent(owner, drawOrder)
-    , mScrollSpeed(0.0f) {
+    , mScrollSpeed(0.0f)
+{
 }
 
-void BackgroundSpriteComponent::Update(float deltaTime) {
+void BackgroundSpriteComponent::Update(float deltaTime)
+{
     SpriteComponent::Update(deltaTime);
 
     for (auto& bg : mBackgroundTextures) {

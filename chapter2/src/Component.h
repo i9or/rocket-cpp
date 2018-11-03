@@ -8,7 +8,8 @@ public:
 
     virtual void Update(float deltaTime);
 
-    int GetUpdateOrder() const {
+    int GetUpdateOrder() const
+    {
         return mUpdateOrder;
     }
 

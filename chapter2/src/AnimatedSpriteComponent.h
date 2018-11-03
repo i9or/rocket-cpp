@@ -12,11 +12,13 @@ public:
     void Update(float deltaTime) override;
     void SetAnimationTextures(const std::vector<SDL_Texture*>& textures);
 
-    float GetAnimationFPS() const {
+    float GetAnimationFPS() const
+    {
         return mAnimationFPS;
     }
 
-    void SetAnimationFPS(float fps) {
+    void SetAnimationFPS(float fps)
+    {
         mAnimationFPS = fps;
     }
 

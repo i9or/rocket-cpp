@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 
 file(GLOB CHAPTER2_ASSETS assets/*)
 file(COPY ${CHAPTER2_ASSETS} DESTINATION assets/)

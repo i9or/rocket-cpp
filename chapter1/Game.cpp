@@ -10,10 +10,12 @@ Game::Game()
     , mTicksCount(0)
     , mIsRunning(true)
     , mPaddleDirectionA(0)
-    , mPaddleDirectionB(0) {
+    , mPaddleDirectionB(0)
+{
 }
 
-bool Game::Initialize() {
+bool Game::Initialize()
+{
     int sdlResult = SDL_Init(SDL_INIT_VIDEO);
     if (sdlResult != 0) {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -63,13 +65,15 @@ bool Game::Initialize() {
     return true;
 }
 
-void Game::ShutDown() {
+void Game::ShutDown()
+{
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
 }
 
-void Game::RunLoop() {
+void Game::RunLoop()
+{
     while (mIsRunning) {
         Uint32 startTime = SDL_GetTicks();
 
@@ -90,7 +94,8 @@ void Game::RunLoop() {
     }
 }
 
-void Game::ProcessInput() {
+void Game::ProcessInput()
+{
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -132,7 +137,8 @@ void Game::ProcessInput() {
     }
 }
 
-void Game::UpdateGame() {
+void Game::UpdateGame()
+{
     while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
         ;
 
@@ -150,7 +156,8 @@ void Game::UpdateGame() {
     UpdateBalls(deltaTime);
 }
 
-void Game::UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& paddleDirection) {
+void Game::UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& paddleDirection)
+{
     if (paddleDirection != 0) {
         paddlePosition.y += paddleDirection * 300.0f * deltaTime;
 
@@ -164,7 +171,8 @@ void Game::UpdatePaddle(const float& deltaTime, Vector2& paddlePosition, int& pa
     }
 }
 
-void Game::UpdateBalls(const float& deltaTime) {
+void Game::UpdateBalls(const float& deltaTime)
+{
     for (auto& ball : mBalls) {
         if (ball.shouldBeRendered) {
             ball.position.x += ball.velocity.x * deltaTime;
@@ -202,7 +210,8 @@ void Game::UpdateBalls(const float& deltaTime) {
     }
 }
 
-void Game::GenerateOutput() {
+void Game::GenerateOutput()
+{
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     SDL_RenderClear(mRenderer);
 

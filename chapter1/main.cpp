@@ -1,6 +1,7 @@
 #include "Game.h"
 
-int main() {
+int main()
+{
     Game game;
 
     bool success = game.Initialize();
