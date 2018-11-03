@@ -45,6 +45,9 @@ private:
     bool mUpdatingActors;
 
     class Ship* mShip;
+
+    const int mScreenWidth = 1280;
+    const int mScreenHeight = 720;
 };
 
 #endif // GAME_H

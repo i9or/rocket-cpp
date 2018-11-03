@@ -11,4 +11,4 @@ file (GLOB CHAPTER2_HEADERS src/*.h)
 
 add_executable(chapter2 ${CHAPTER2_SOURCES} ${CHAPTER2_HEADERS} ${CHAPTER2_ASSETS})
 
-target_link_libraries(chapter2 ${SDL2_LIBRARY})
+target_link_libraries(chapter2 ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY})

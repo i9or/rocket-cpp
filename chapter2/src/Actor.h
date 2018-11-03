@@ -1,6 +1,7 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
+#include <cstdint>
 #include <vector>
 
 #include "Math.h"

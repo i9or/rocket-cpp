@@ -1,10 +1,14 @@
-#include <iostream>
-
-using namespace std;
+#include "Game.h"
 
 int main()
 {
-    cout << "Chapter 2 template" << endl;
+    Game game;
+    bool success = game.Initialize();
 
+    if (success) {
+        game.RunLoop();
+    }
+
+    game.Shutdown();
     return 0;
 }

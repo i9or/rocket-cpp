@@ -1,7 +1,3 @@
-//
-// Created by Igor Pelekhan on 02/10/2018.
-//
-
 #include "Game.h"
 
 Game::Game()
