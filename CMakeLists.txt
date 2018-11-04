@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(game-cpp)
+project(rocket-cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
@@ -41,5 +41,15 @@ else ()
     message(STATUS "\tLibrary path: ${SDL2_TTF_LIBRARY}")
 endif ()
 
-add_subdirectory(chapter1)
-add_subdirectory(chapter2)
+file(GLOB ROCKET_CPP_ASSETS assets/*)
+file(COPY ${ROCKET_CPP_ASSETS} DESTINATION assets/)
+
+include_directories("./src")
+include_directories(${SDL2_INCLUDE_DIR})
+
+file (GLOB ROCKET_CPP_SOURCES src/*.cpp)
+file (GLOB ROCKET_CPP_HEADERS src/*.h)
+
+add_executable(${PROJECT_NAME} ${ROCKET_CPP_SOURCES} ${ROCKET_CPP_HEADERS} ${ROCKET_CPP_ASSETS})
+
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY})
