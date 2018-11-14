@@ -11,13 +11,11 @@ Actor::Actor(Game* game)
     , mPosition(Vector2::Zero)
     , mScale(1.0f)
     , mRotation(0.0f)
-    , mGame(game)
-{
+    , mGame(game) {
     mGame->AddActor(this);
 }
 
-Actor::~Actor()
-{
+Actor::~Actor() {
     mGame->RemoveActor(this);
 
     while (!mComponents.empty()) {
@@ -25,27 +23,23 @@ Actor::~Actor()
     }
 }
 
-void Actor::Update(float deltaTime)
-{
+void Actor::Update(float deltaTime) {
     if (mState == EActive) {
         UpdateComponents(deltaTime);
         UpdateActor(deltaTime);
     }
 }
 
-void Actor::UpdateComponents(float deltaTime)
-{
+void Actor::UpdateComponents(float deltaTime) {
     for (auto component : mComponents) {
         component->Update(deltaTime);
     }
 }
 
-void Actor::UpdateActor(float deltaTime)
-{
+void Actor::UpdateActor(float /* deltaTime */) {
 }
 
-void Actor::AddComponent(Component* component)
-{
+void Actor::AddComponent(Component* component) {
     int componentOrder = component->GetUpdateOrder();
     auto iterator = mComponents.begin();
     for (; iterator != mComponents.end(); ++iterator) {
@@ -57,8 +51,7 @@ void Actor::AddComponent(Component* component)
     mComponents.insert(iterator, component);
 }
 
-void Actor::RemoveComponent(Component* component)
-{
+void Actor::RemoveComponent(Component* component) {
     auto iterator = std::find(mComponents.begin(), mComponents.end(), component);
     if (iterator != mComponents.end()) {
         mComponents.erase(iterator);

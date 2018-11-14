@@ -5,20 +5,18 @@
 Ship::Ship(Game* game)
     : Actor(game)
     , mHorizontalSpeed(0.0f)
-    , mVerticalSpeed(0.0f)
-{
+    , mVerticalSpeed(0.0f) {
     AnimatedSpriteComponent* animatedSpriteComponent = new AnimatedSpriteComponent(this);
     std::vector<SDL_Texture*> animationTextures = {
-            game->GetTexture("assets/rocket1.png"), //
-            game->GetTexture("assets/rocket2.png"), //
-            game->GetTexture("assets/rocket3.png")  //
+        game->GetTexture("assets/rocket1.png"),
+        game->GetTexture("assets/rocket2.png"),
+        game->GetTexture("assets/rocket3.png")
     };
 
     animatedSpriteComponent->SetAnimationTextures(animationTextures);
 }
 
-void Ship::UpdateActor(float deltaTime)
-{
+void Ship::UpdateActor(float deltaTime) {
     Actor::UpdateActor(deltaTime);
 
     Vector2 pos = GetPosition();
@@ -42,8 +40,7 @@ void Ship::UpdateActor(float deltaTime)
     SetPosition(pos);
 }
 
-void Ship::ProcessKeyboard(const std::uint8_t* state)
-{
+void Ship::ProcessKeyboard(const std::uint8_t* state) {
     mHorizontalSpeed = 0.0f;
     mVerticalSpeed = 0.0f;
 

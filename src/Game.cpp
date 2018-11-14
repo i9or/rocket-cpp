@@ -12,12 +12,10 @@ Game::Game()
     : mWindow(nullptr)
     , mRenderer(nullptr)
     , mIsRunning(true)
-    , mUpdatingActors(false)
-{
+    , mUpdatingActors(false) {
 }
 
-bool Game::Initialize()
-{
+bool Game::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
         return false;
@@ -46,8 +44,7 @@ bool Game::Initialize()
     return true;
 }
 
-void Game::RunLoop()
-{
+void Game::RunLoop() {
     while (mIsRunning) {
         ProcessInput();
         UpdateGame();
@@ -55,8 +52,7 @@ void Game::RunLoop()
     }
 }
 
-void Game::Shutdown()
-{
+void Game::Shutdown() {
     UnloadData();
     IMG_Quit();
     SDL_DestroyRenderer(mRenderer);
@@ -64,8 +60,7 @@ void Game::Shutdown()
     SDL_Quit();
 }
 
-void Game::ProcessInput()
-{
+void Game::ProcessInput() {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -84,8 +79,7 @@ void Game::ProcessInput()
     mShip->ProcessKeyboard(state);
 }
 
-void Game::UpdateGame()
-{
+void Game::UpdateGame() {
     while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
         ;
 
@@ -118,8 +112,7 @@ void Game::UpdateGame()
     }
 }
 
-void Game::GenerateOutput()
-{
+void Game::GenerateOutput() {
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     SDL_RenderClear(mRenderer);
 
@@ -130,8 +123,7 @@ void Game::GenerateOutput()
     SDL_RenderPresent(mRenderer);
 }
 
-void Game::LoadData()
-{
+void Game::LoadData() {
     mShip = new Ship(this);
     mShip->SetPosition(Vector2(150.0f, mScreenHeight / 2.0f));
     mShip->SetScale(0.5f);
@@ -142,8 +134,8 @@ void Game::LoadData()
     BackgroundSpriteComponent* bg = new BackgroundSpriteComponent(temp);
     bg->SetScreenSize(Vector2(mScreenWidth, mScreenHeight));
     std::vector<SDL_Texture*> texs = {
-            GetTexture("assets/background1.png"), //
-            GetTexture("assets/background2.png")  //
+        GetTexture("assets/background1.png"),
+        GetTexture("assets/background2.png")
     };
 
     bg->SetBackgroundTextures(texs);
@@ -152,15 +144,14 @@ void Game::LoadData()
     bg = new BackgroundSpriteComponent(temp, 50);
     bg->SetScreenSize(Vector2(mScreenWidth, mScreenHeight));
     texs = {
-            GetTexture("assets/stars1.png"), //
-            GetTexture("assets/stars1.png")  //
+        GetTexture("assets/stars1.png"),
+        GetTexture("assets/stars1.png")
     };
     bg->SetBackgroundTextures(texs);
     bg->SetScrollSpeed(-200.0f);
 }
 
-void Game::UnloadData()
-{
+void Game::UnloadData() {
     while (!mActors.empty()) {
         delete mActors.back();
     }
@@ -172,8 +163,7 @@ void Game::UnloadData()
     mTextures.clear();
 }
 
-SDL_Texture* Game::GetTexture(const std::string& fileName)
-{
+SDL_Texture* Game::GetTexture(const std::string& fileName) {
     SDL_Texture* texture = nullptr;
 
     auto iter = mTextures.find(fileName);
@@ -199,8 +189,7 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
     return texture;
 }
 
-void Game::AddActor(Actor* actor)
-{
+void Game::AddActor(Actor* actor) {
     if (mUpdatingActors) {
         mPendingActors.emplace_back(actor);
     } else {
@@ -208,8 +197,7 @@ void Game::AddActor(Actor* actor)
     }
 }
 
-void Game::RemoveActor(Actor* actor)
-{
+void Game::RemoveActor(Actor* actor) {
     auto iter = std::find(mPendingActors.begin(), mPendingActors.end(), actor);
     if (iter != mPendingActors.end()) {
         std::iter_swap(iter, mPendingActors.end() - 1);
@@ -223,8 +211,7 @@ void Game::RemoveActor(Actor* actor)
     }
 }
 
-void Game::AddSprite(SpriteComponent* sprite)
-{
+void Game::AddSprite(SpriteComponent* sprite) {
     int drawOrder = sprite->GetDrawOrder();
     auto iter = mSprites.begin();
     for (; iter != mSprites.end(); ++iter) {
@@ -236,8 +223,7 @@ void Game::AddSprite(SpriteComponent* sprite)
     mSprites.insert(iter, sprite);
 }
 
-void Game::RemoveSprite(SpriteComponent* sprite)
-{
+void Game::RemoveSprite(SpriteComponent* sprite) {
     auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
     mSprites.erase(iter);
 }

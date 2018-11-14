@@ -7,18 +7,15 @@ SpriteComponent::SpriteComponent(Actor* owner, int drawOrder)
     , mTexture(nullptr)
     , mDrawOrder(drawOrder)
     , mTextureWidth(0)
-    , mTextureHeight(0)
-{
+    , mTextureHeight(0) {
     mOwner->GetGame()->AddSprite(this);
 }
 
-SpriteComponent::~SpriteComponent()
-{
+SpriteComponent::~SpriteComponent() {
     mOwner->GetGame()->RemoveSprite(this);
 }
 
-void SpriteComponent::Draw(SDL_Renderer* renderer)
-{
+void SpriteComponent::Draw(SDL_Renderer* renderer) {
     if (mTexture) {
         SDL_Rect r;
         r.w = static_cast<int>(mTextureWidth * mOwner->GetScale());
@@ -27,13 +24,17 @@ void SpriteComponent::Draw(SDL_Renderer* renderer)
         r.x = static_cast<int>(mOwner->GetPosition().x - r.w / 2);
         r.y = static_cast<int>(mOwner->GetPosition().y - r.h / 2);
 
-        SDL_RenderCopyEx(
-                renderer, mTexture, nullptr, &r, -Math::ToDegrees(mOwner->GetRotation()), nullptr, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(renderer,
+                         mTexture,
+                         nullptr,
+                         &r,
+                         static_cast<double>(-Math::ToDegrees(mOwner->GetRotation())),
+                         nullptr,
+                         SDL_FLIP_NONE);
     }
 }
 
-void SpriteComponent::SetTexture(SDL_Texture* texture)
-{
+void SpriteComponent::SetTexture(SDL_Texture* texture) {
     mTexture = texture;
     SDL_QueryTexture(texture, nullptr, nullptr, &mTextureWidth, &mTextureHeight);
 }

@@ -9,13 +9,11 @@ public:
     void UpdateActor(float deltaTime) override;
     void ProcessKeyboard(const std::uint8_t* state);
 
-    float GetHorizontalSpeed() const
-    {
+    float GetHorizontalSpeed() const {
         return mHorizontalSpeed;
     }
 
-    float GetVerticalSpeed() const
-    {
+    float GetVerticalSpeed() const {
         return mVerticalSpeed;
     }
 

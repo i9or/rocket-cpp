@@ -1,13 +1,35 @@
+---
 BasedOnStyle: Webkit
-ColumnLimit: 120
-IndentWidth: 4
-ContinuationIndentWidth: 8
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignEscapedNewlines: Right
+AlignOperands: true
 AlignTrailingComments: true
-AllowShortFunctionsOnASingleLine: false
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
-BinPackParameters: false
+AlwaysBreakBeforeMultilineStrings: true
+AlwaysBreakTemplateDeclarations: true
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
-Cpp11BracedListStyle: true
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: 0
+FixNamespaceComments: true
 IndentCaseLabels: true
-AlwaysBreakTemplateDeclarations: Yes
+IndentWidth: 4
+IndentWrappedFunctionNames: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+Language: Cpp
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard: Cpp11
+TabWidth: 4
+UseTab: Never
+
+...

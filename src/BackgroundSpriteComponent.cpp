@@ -3,12 +3,10 @@
 
 BackgroundSpriteComponent::BackgroundSpriteComponent(Actor* owner, int drawOrder)
     : SpriteComponent(owner, drawOrder)
-    , mScrollSpeed(0.0f)
-{
+    , mScrollSpeed(0.0f) {
 }
 
-void BackgroundSpriteComponent::Update(float deltaTime)
-{
+void BackgroundSpriteComponent::Update(float deltaTime) {
     SpriteComponent::Update(deltaTime);
 
     for (auto& bg : mBackgroundTextures) {
@@ -20,8 +18,7 @@ void BackgroundSpriteComponent::Update(float deltaTime)
     }
 }
 
-void BackgroundSpriteComponent::Draw(SDL_Renderer* renderer)
-{
+void BackgroundSpriteComponent::Draw(SDL_Renderer* renderer) {
     for (auto& bg : mBackgroundTextures) {
         SDL_Rect r;
 
@@ -34,8 +31,7 @@ void BackgroundSpriteComponent::Draw(SDL_Renderer* renderer)
     }
 }
 
-void BackgroundSpriteComponent::SetBackgroundTextures(const std::vector<SDL_Texture*>& textures)
-{
+void BackgroundSpriteComponent::SetBackgroundTextures(const std::vector<SDL_Texture*>& textures) {
     int count = 0;
     for (auto texture : textures) {
         BackgroundTexture temp;

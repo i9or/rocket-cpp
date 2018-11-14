@@ -16,16 +16,15 @@ public:
 
     void SetBackgroundTextures(const std::vector<SDL_Texture*>& textures);
 
-    void SetScreenSize(const Vector2& size)
-    {
+    void SetScreenSize(const Vector2& size) {
         mScreenSize = size;
     }
-    void SetScrollSpeed(float speed)
-    {
+
+    void SetScrollSpeed(float speed) {
         mScrollSpeed = speed;
     }
-    float GetScrollSpeed() const
-    {
+
+    float GetScrollSpeed() const {
         return mScrollSpeed;
     }
 
