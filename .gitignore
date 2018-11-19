@@ -367,3 +367,5 @@ ASALocalRun/
 *.app
 
 .vscode/
+
+!rocket-cpp/dependencies/**
