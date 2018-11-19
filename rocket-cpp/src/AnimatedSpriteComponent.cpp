@@ -1,5 +1,5 @@
-#include "AnimatedSpriteComponent.h"
 #include "Math.h"
+#include "AnimatedSpriteComponent.h"
 
 AnimatedSpriteComponent::AnimatedSpriteComponent(Actor* owner, int drawOrder)
     : SpriteComponent(owner, drawOrder)

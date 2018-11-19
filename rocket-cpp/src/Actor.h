@@ -1,10 +1,9 @@
-#ifndef ACTOR_H
-#define ACTOR_H
+#pragma once
+
+#include "Math.h"
 
 #include <cstdint>
 #include <vector>
-
-#include "Math.h"
 
 class Actor {
 public:
@@ -70,5 +69,3 @@ private:
     std::vector<class Component*> mComponents;
     class Game* mGame;
 };
-
-#endif // ACTOR_H

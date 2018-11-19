@@ -132,7 +132,7 @@ void Game::LoadData() {
     temp->SetPosition(Vector2(mScreenWidth / 2.0f, mScreenHeight / 2.0f));
 
     BackgroundSpriteComponent* bg = new BackgroundSpriteComponent(temp);
-    bg->SetScreenSize(Vector2(mScreenWidth, mScreenHeight));
+    bg->SetScreenSize(Vector2(static_cast<float>(mScreenWidth), static_cast<float>(mScreenHeight)));
     std::vector<SDL_Texture*> texs = {
         GetTexture("assets/background1.png"),
         GetTexture("assets/background2.png")
@@ -142,7 +142,7 @@ void Game::LoadData() {
     bg->SetScrollSpeed(-100.0f);
 
     bg = new BackgroundSpriteComponent(temp, 50);
-    bg->SetScreenSize(Vector2(mScreenWidth, mScreenHeight));
+    bg->SetScreenSize(Vector2(static_cast<float>(mScreenWidth), static_cast<float>(mScreenHeight)));
     texs = {
         GetTexture("assets/stars1.png"),
         GetTexture("assets/stars1.png")

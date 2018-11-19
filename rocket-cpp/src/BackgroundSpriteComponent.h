@@ -1,11 +1,10 @@
 #ifndef BACKGROUND_SPRITE_COMPONENT_H
 #define BACKGROUND_SPRITE_COMPONENT_H
 
+#include "Math.h"
 #include "SpriteComponent.h"
 
 #include <vector>
-
-#include "Math.h"
 
 class BackgroundSpriteComponent : public SpriteComponent {
 public:
